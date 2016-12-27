@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar color="chocolate">
+    <ion-title>login</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding> 
+
+  <h2 class="logo" text-center>Lista de Compras</h2>
+
+  <div padding>
+
+    <!-- LOGIN -->
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Login</ion-label>
+        <ion-input type="text" [(ngModel)]="usuario.login"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Senha</ion-label>
+        <ion-input type="password" [(ngModel)]="usuario.senha"></ion-input>
+      </ion-item>
+
+
+      <button ion-button color="light" outline full (click)="logar()">Login</button>
+    </ion-list>
+
+
+
+  </div>
+
+</ion-content>

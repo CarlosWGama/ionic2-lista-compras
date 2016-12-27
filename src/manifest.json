@@ -1,0 +1,13 @@
+{
+  "name": "Lista de Compras",
+  "short_name": "Ionic",
+  "start_url": "index.html",
+  "display": "standalone",
+  "icons": [{
+    "src": "assets/imgs/logo.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
+  "background_color": "#b38540",
+  "theme_color": "#563e20"
+}

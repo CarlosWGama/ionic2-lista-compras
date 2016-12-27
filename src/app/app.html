@@ -1,0 +1,18 @@
+<ion-menu [content]="mainContent">
+    
+    <ion-header>
+        <ion-toolbar>
+            <ion-title>Carlos W. Gama</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+        <ion-list>
+            <button ion-item>Compras</button>
+            <button ion-item>Logout</button>
+        </ion-list>
+    </ion-content>
+</ion-menu>
+
+
+<ion-nav #mainContent [root]="rootPage"></ion-nav>

@@ -1,0 +1,47 @@
+<ion-header>
+
+  <ion-navbar color="chocolate">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title>listas</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <!-- LISTA -->
+  <ion-list>
+
+    <ion-list-header color="chocolate">
+      Ultimas compras
+    </ion-list-header>
+
+    <ion-item-sliding *ngFor="let c of compras">
+      <ion-item (click)="abrirCompra(c.id)"> {{c.compra}} </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="primary">
+          <ion-icon name="trash"></ion-icon>
+          Excluir
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  
+  </ion-list>
+  
+
+
+
+
+  <!-- FAB -->
+  <ion-fab bottom right>
+    <button ion-fab mini color="chocolate"><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab (click)="novaCompra()"><ion-icon name="md-bookmarks"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
+
+</ion-content>
