@@ -1,24 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
 
 import { ComprasPage } from './../compras/compras';
+import { Compras } from './../../providers/compras';
 
 @Component({
   selector: 'page-listas',
-  templateUrl: 'listas.html'
+  templateUrl: 'listas.html',
+  providers: []
 })
-export class ListasPage {
+export class ListasPage implements OnInit {
 
-  compras: any = [
-    {compra: "AAAA", id: 1}, {compra: "BBBB", id: 1}, {compra: "CCCC", id: 1},
-    {compra: "DDDD", id: 1}, {compra: "EEEE", id: 1}, {compra: "FFFF", id: 1},
-    {compra: "GGGG", id: 1}, {compra: "HHHH", id: 1}, {compra: "IIII", id: 1},
-  ]
+  lista: Observable<any[]> = new Observable<any[]>();
 
-  constructor(public navCtrl: NavController) {}
+  constructor(public navCtrl: NavController, private compras: Compras) {
+  }
 
-  ionViewDidLoad() {
-    console.log('Hello ListasPage Page');
+  ngOnInit() {
+    this.lista = this.compras.getCompras();
   }
 
   abrirCompra(id: number) {

@@ -2,17 +2,17 @@
     
     <ion-header>
         <ion-toolbar>
-            <ion-title>Carlos W. Gama</ion-title>
+            <ion-title>{{menuInfo.usuario}}</ion-title>
         </ion-toolbar>
     </ion-header>
 
     <ion-content>
         <ion-list>
-            <button ion-item>Compras</button>
-            <button ion-item>Logout</button>
+            <button ion-item *ngFor="let menu of menuPages" (click)="menuOpenPage(menu.page)" menuToggle>{{ menu.menu }}</button>
+            <button ion-item (click)="menuLogout()" menuToggle>Logout</button>
         </ion-list>
     </ion-content>
 </ion-menu>
 
 
-<ion-nav #mainContent [root]="rootPage"></ion-nav>
+<ion-nav #mainContent [root]="rootPage" (onMenuAction)="changeMenu($event)"></ion-nav>

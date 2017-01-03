@@ -20,8 +20,8 @@
       Ultimas compras
     </ion-list-header>
 
-    <ion-item-sliding *ngFor="let c of compras">
-      <ion-item (click)="abrirCompra(c.id)"> {{c.compra}} </ion-item>
+    <ion-item-sliding *ngFor="let c of lista | async">
+      <ion-item (click)="abrirCompra(c.id)"> {{c.nome}} </ion-item>
       <ion-item-options side="right">
         <button ion-button color="primary">
           <ion-icon name="trash"></ion-icon>
@@ -29,7 +29,7 @@
         </button>
       </ion-item-options>
     </ion-item-sliding>
-  
+
   </ion-list>
   
 
