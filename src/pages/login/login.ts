@@ -24,12 +24,7 @@ export class LoginPage implements OnInit {
 
   //Redireciona, caso necessário
   ngOnInit(): void {
-    //Redireciona se já estiver logado
-    this.storage.get('isLogin').then((isLogin: boolean) => {
-      if (isLogin) {
-        this.changeToLista();
-      }
-    });
+    this.usuarios.logout();
   }
 
   ionViewDidLoad() {
@@ -38,22 +33,48 @@ export class LoginPage implements OnInit {
 
   //** Login **/
   logar(): void {
-    if (this.usuarios.login(this.usuario.login, this.usuario.senha)) {
-      this.events.publish('login:created', {
-        login: true,
-        usuario: this.usuarios.getUser().usuario
+      this.usuarios.auth.signInWithEmailAndPassword(this.usuario.login, this.usuario.senha).catch((erro) => {
+        let msg = '';
+        switch(erro.code) {
+          case 'auth/invalid-email': msg = 'Email inválido'; break;
+          case 'auth/user-disabled': msg = 'Esse usuário foi desabilitado'; break;
+          case 'auth/user-not-found': msg = 'Usuário não encontrado'; break;
+          case 'auth/wrong-password': msg = 'Senha incorreta'; break
+           
+        }
+        this.alertCtrl.create({
+          title: 'Erro',
+          message: msg,
+          buttons: ['Ok']
+        }).present();  
       });
-      
-      this.storage.set('isLogin', true);
-      this.changeToLista();
-      
-    } else {
-      this.alertCtrl.create({
-        title: 'Erro',
-        message: 'Login ou Senha incorreta',
-        buttons: ['Ok']
-      }).present();
-    }
+      this.usuarios.auth.onAuthStateChanged((user) => {
+        if (user) {
+          console.log(user);
+          this.changeToLista();
+        }
+      });  
+    
+  }
+
+  public cadastrar() {
+    this.alertCtrl.create({
+      title: 'Cadastrar Usuário',
+      message: 'Message',
+      inputs: [
+        {name: 'email', placeholder: 'Email', type:'email'},
+        {name: 'senha', placeholder: 'Senha', type: 'password'}
+      ],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Cadastrar',
+          handler: (data) => {
+            this.usuarios.cadastrar(data.email, data.senha);
+          }
+        }
+      ]
+    }).present();
   }
 
   /* Envia o usuário para a página após login */

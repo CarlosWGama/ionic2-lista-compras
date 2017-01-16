@@ -1,3 +1,4 @@
+import { Usuarios } from './../providers/usuarios';
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Platform, MenuController, Events } from 'ionic-angular';
@@ -16,7 +17,7 @@ export class MyApp {
     {menu: "Compras", page: ListasPage }
   ]
 
-  constructor(platform: Platform,  private menuCtrl: MenuController, private storage: Storage, private events: Events) {
+  constructor(platform: Platform,  private menuCtrl: MenuController, private storage: Storage, private events: Events, private usuarios: Usuarios) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -25,21 +26,15 @@ export class MyApp {
 
 
       //Redireciona para a página inciial
-      this.storage.get('isLogin').then((isLogin: boolean) => {
-        if (!isLogin)
-          this.rootPage = LoginPage;
-        else
-          this.rootPage = ListasPage;
-      });
+      if (this.usuarios.getUsuario() == null) 
+        this.rootPage = LoginPage;
+      else
+        this.rootPage = ListasPage;
+    
 
-      //Altera sempre que faz o login ou logout
-      this.events.subscribe('login:created', (data) => {
-        console.log(data);
-        if (data.login == true) {
-          this.menuCtrl.enable(true);
-          this.menuInfo.usuario = data.usuario;
-        } else {
-          this.menuCtrl.enable(false); 
+      this.usuarios.auth.onAuthStateChanged((user) => {
+        if (user) {
+          this.menuInfo.usuario = user.email;
         }
       });
 
@@ -50,8 +45,8 @@ export class MyApp {
    * Botão do Menu para deslogar da conta
    */
   menuLogout() {
-    this.storage.set('isLogin', false);
     this.rootPage = LoginPage;
+    this.usuarios.logout();
   }
 
   /**

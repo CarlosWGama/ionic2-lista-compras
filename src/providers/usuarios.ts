@@ -3,32 +3,47 @@ import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/map';
 
+declare var firebase;
+
 @Injectable()
 export class Usuarios {
 
+  public auth;
+
   constructor(private http: Http, private storage: Storage) {
     console.log('Hello Usuarios Provider');
+    this.auth = firebase.auth();
   }
 
-  public login(login: string, senha: string): boolean {
-    if (login == 'carloswgama@gmail.com' && senha == '123456') {
-      this.storage.set('usuario', {usuario: 'Carlos W. Gama', token: 'dajhuih1uh13'});
-      return true;
-    }
-    return false;
+  /**
+   * Realiza o login
+   */
+  public logar(login: string, senha: string): any {
+    this.auth.signInWithEmailAndPassword(login, senha);
   }
 
-  public getUser(): { usuario: string, token: string } {
-    let usuario = { usuario: '', token: ''}; 
-    this.storage.get('usuario').then((data) => {
-      usuario = data;
+  /**
+   * Cria o usuário
+   */
+  public cadastrar(email: string, senha: string): boolean {
+    this.auth.createUserWithEmailAndPassword(email, senha).catch((error) => {
+      return false;
     });
-    return usuario;
+    return true;
   }
 
-  public getToken(): string {
-    let usuario = this.getUser();
-    return usuario.token;
+  /**
+   * Recupera o usuário logado
+   */
+  public getUsuario(): any {
+    return this.auth.currentUser;
+  }
+
+  /**
+   * Realiza o logout
+   */
+  public logout() {
+    this.auth.signOut();
   }
 
 }
