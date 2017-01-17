@@ -2,10 +2,10 @@ import { Item } from './item.mode';
 
 export class Compra {
 
-    private total;
-    private totalComprado;
+    private total: number = 0;
+    private totalComprado: number = 0;
 
-    constructor(private id: number, private nome: string, 
+    constructor(private id: string, private nome: string, 
         private itensDisponiveis: Item[], private itensComprados: Item[]
     ) { 
         itensComprados.forEach((item: Item) => {
@@ -20,7 +20,8 @@ export class Compra {
     }
 
     /********** GETTERS *******************/
-    getID(): number { return this.id; }
+    getID(): string { return this.id; }
+    setID(id: string) { this.id = id; }
     getNome(): string { return this.nome; }
     getItensDisponiveis(): Item[] { return this.itensDisponiveis }
     getItensComprados(): Item[] { return this.itensComprados; }

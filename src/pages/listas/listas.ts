@@ -12,13 +12,14 @@ import { Compras } from './../../providers/compras';
 })
 export class ListasPage implements OnInit {
 
-  lista: Observable<any[]> = new Observable<any[]>();
+  lista: Promise<any[]>;
 
   constructor(public navCtrl: NavController, private compras: Compras) {
   }
 
   ngOnInit() {
     this.lista = this.compras.getCompras();
+    //console.log(this.lista);
   }
 
   abrirCompra(id: number) {

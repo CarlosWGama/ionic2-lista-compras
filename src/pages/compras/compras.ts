@@ -1,6 +1,6 @@
 import { Compra } from './../../models/compra.model';
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, NavParams } from 'ionic-angular';
 
 import { ListasPage } from './../listas/listas';
 import { Compras } from './../../providers/compras';
@@ -20,7 +20,10 @@ export class ComprasPage {
 
   private contID: number = 0;
 
-  constructor(public navCtrl: NavController, private compras: Compras, private alertCtrl: AlertController ) {}
+  constructor(public navCtrl: NavController, private compras: Compras, private alertCtrl: AlertController, public params: NavParams ) {
+    let compraID: string = this.params.get('compraID');
+
+  }
 
   ionViewDidLoad() {
     console.log('Hello ComprasPage Page');
@@ -39,7 +42,7 @@ export class ComprasPage {
         {
           text: 'Salvar',
           handler: (data) => {
-            let compra = new Compra(0, data.nome, this.itensDisponiveis, this.itensComprados);
+            let compra = new Compra('0', data.nome, this.itensDisponiveis, this.itensComprados);
             this.compras.cadastrar(compra);
             this.navCtrl.setRoot(ListasPage);
           }
