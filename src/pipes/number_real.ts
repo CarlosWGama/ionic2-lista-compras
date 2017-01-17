@@ -6,8 +6,7 @@ import { Injectable, Pipe } from '@angular/core';
 @Injectable()
 export class NumberReal {
   
-  transform(value, args) {
-    //value = value + '';
+  transform(value, args?) {
     return 'R$ ' + parseFloat(value).toFixed(2);
   }
 }

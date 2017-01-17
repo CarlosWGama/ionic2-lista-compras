@@ -20,10 +20,10 @@
 
 <ion-content padding>
 
-  <div *ngIf="compra.itensDisponiveis.length > 0 || compra.itensComprados.length > 0">
+  <div *ngIf="compra.getItensDisponiveis().length > 0 || compra.getItensComprados().length > 0">
     <!-- ITENS DA COMPRA -->
     <ion-list>
-      <ion-item *ngFor="let item of compra.itensDisponiveis" (tap)="comprar(item)"  (press)="excluir(item, 1)">
+      <ion-item *ngFor="let item of compra.getItensDisponiveis()" (tap)="comprar(item)"  (press)="excluir(item, 1)">
         {{ item.getNome() }} ({{ item.getPreco() | number_real }}) x {{item.getQuantidade() }} ({{ item.getTotal() | number_real }} )
       </ion-item>
     </ion-list>
@@ -31,7 +31,7 @@
 
     <!-- ITENS COMPRADOS -->
     <ion-list>
-      <ion-item *ngFor="let item of compra.itensComprados"  (tap)="descomprar(item)" (press)="excluir(item, 2)" class="comprado">
+      <ion-item *ngFor="let item of compra.getItensComprados()"  (tap)="descomprar(item)" (press)="excluir(item, 2)" class="comprado">
         {{ item.getNome() }} ({{ item.getPreco()  | number_real}}) x {{item.getQuantidade() }} ({{ item.getTotal() | number_real }})
       </ion-item>
     </ion-list>
@@ -39,7 +39,7 @@
   </div>
 
   <!-- NÂO TEM ITENS -->
-  <div *ngIf="compra.itensDisponiveis.length == 0 && compra.itensComprados.length == 0">
+  <div *ngIf="compra.getItensDisponiveis().length == 0 && compra.getItensComprados().length == 0">
       <h2 text-center>Nenhum item adicionado a compra</h2>
   </div>
   <!-- [FIM] NÂO TEM ITENS -->
@@ -49,7 +49,7 @@
 <!-- TOTAL -->
 <ion-footer>
   <ion-toolbar>
-    <p>Total Lista / Total Comprado: ({{compra.total | number_real}} / {{compra.totalComprado | number_real}})</p>
+    <p>Total Lista / Total Comprado: ({{compra.getTotal() | number_real}} / {{compra.getTotalComprado() | number_real}})</p>
     <ion-buttons end>
       <button ion-button icon-right color="royal" (click)="novoItem();">
         Adicionar
