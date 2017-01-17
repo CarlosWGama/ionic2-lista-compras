@@ -12,16 +12,13 @@ import { Item } from './../../models/item.mode';
 })
 export class ComprasPage {
 
-  itensDisponiveis: Item[] = [];
-  itensComprados: Item[] = [];
-
-  totalLista: number = 0;
-  totalComprado: number = 0;
-
-  private contID: number = 0;
-
+  compra: Compra = new Compra();
+  
   constructor(public navCtrl: NavController, private compras: Compras, private alertCtrl: AlertController, public params: NavParams ) {
     let compraID: string = this.params.get('compraID');
+    if (compraID) {
+      this.compras.getCompra(compraID).then(compra => this.compra = compra );
+    }
 
   }
 
@@ -36,14 +33,17 @@ export class ComprasPage {
     this.alertCtrl.create({
       title: 'Salvar?',
       message: 'Digite um nome para a compra',
-      inputs: [ { name: 'nome', placeholder: 'Nome da compra' } ],
+      inputs: [ { name: 'nome', placeholder: 'Nome da compra', value: this.compra.getNome() } ],
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Salvar',
           handler: (data) => {
-            let compra = new Compra('0', data.nome, this.itensDisponiveis, this.itensComprados);
-            this.compras.cadastrar(compra);
+            this.compra.setNome(data.nome);
+            if (this.compra.getID())
+              this.compras.editar(this.compra.getID(), this.compra);
+            else
+              this.compras.cadastrar(this.compra);
             this.navCtrl.setRoot(ListasPage);
           }
         }
@@ -69,9 +69,9 @@ export class ComprasPage {
         {
           text: 'Adicionar',
           handler: (data) => {
-            let item = new Item(++this.contID, data.nome, data.quantidade, data.preco);
-            this.itensDisponiveis.push(item);
-            this.ordenaListas();
+            let item = new Item(this.compra.pushItemID(), data.nome, data.quantidade, data.preco);
+            this.compra.getItensDisponiveis().push(item);
+            this.compra.ordenaListas();
           }
         }
       ]
@@ -82,18 +82,18 @@ export class ComprasPage {
    * Manda o item para lista de itens comprados
    */
   comprar(item: Item) {
-    this.removeListaDisponivel(item)
-    this.itensComprados.push(item);
-    this.ordenaListas();
+    this.compra.removeListaDisponivel(item)
+    this.compra.getItensComprados().push(item);
+    this.compra.ordenaListas();
   }
 
   /**
    * Manda o item para lista de itens ainda a comprar 
    */
   descomprar(item: Item) {
-    this.removeListaComprados(item);
-    this.itensDisponiveis.push(item);
-    this.ordenaListas();
+    this.compra.removeListaComprados(item);
+    this.compra.getItensDisponiveis().push(item);
+    this.compra.ordenaListas();
   }
 
   /**
@@ -110,60 +110,16 @@ export class ComprasPage {
           handler: () => {             
             switch(lista) {
               case 1:
-                this.removeListaDisponivel(item);
+                this.compra.removeListaDisponivel(item);
                 break;
               case 2: 
-                this.removeListaComprados(item);
+                this.compra.removeListaComprados(item);
                 break;
             }
          }
         }
       ]
     }).present();
-    this.atualizarTotais();
-  }
-
-  /**
-   * Remove item da lista de itens disponiveis
-   */
-  private removeListaDisponivel(item: Item) {
-    this.itensDisponiveis = this.itensDisponiveis.filter((value: Item) => value.getID() != item.getID());
-  }
-
-  /**
-   * Remove item da lista de itens comprados
-   */
-  private removeListaComprados(item: Item) {
-    this.itensComprados = this.itensComprados.filter((value: Item) => value.getID() != item.getID());
-  }
-
-  /**
-   * Reordena as listas
-   */
-  private ordenaListas() {
-    this.itensComprados.sort((a: Item, b: Item) => a.getNome() > b.getNome() ? 1 : -1);
-    this.itensDisponiveis.sort((a: Item, b: Item) => a.getNome() > b.getNome() ? 1 : -1);
-    this.atualizarTotais();
-  }
-
-  /**
-   * Preço gasto na compra
-   */
-  private atualizarTotais() {
-    this.totalComprado = 0;
-    this.totalLista = 0;
-
-    //Itens comprados
-    this.itensComprados.forEach((item: Item) => {
-      this.totalComprado += item.getTotal();
-    });
-
-    this.totalLista = this.totalComprado;
-
-    //Itens ainda na lista
-    this.itensDisponiveis.forEach((item: Item) => {
-      this.totalLista += item.getTotal();
-    });
-
+    this.compra.atualizarTotais();
   }
 }

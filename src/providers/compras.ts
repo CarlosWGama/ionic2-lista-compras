@@ -1,8 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/Observable/of';
-import 'rxjs/add/operator/map';
 
 import { Compra } from './../models/compra.model';
 import { Item } from './../models/item.mode';
@@ -15,63 +11,61 @@ export class Compras {
   private db;
   private usuarioID;
 
-  constructor(public http: Http) {
+  constructor() {
     console.log('Hello Compras Provider');
     this.db = firebase.database();
     this.usuarioID = firebase.auth().currentUser.uid;
   }
 
-
-  getCompras() {
-    return new Promise<any>((resolve, reject )=> {
-      this.db.ref('/compras/' + this.usuarioID).once('value').then(snapshot => {
+  /**
+   * Lista todas as compras do usuário logado
+   */
+  getCompras(): Promise<Compra[]> {
+    return this.db.ref('/compras/' + this.usuarioID).once('value').then(snapshot => {
         
         let compras: Compra[] = [];
         if (Object.keys(snapshot.val()).length > 0) {
           
           Object.keys(snapshot.val()).forEach(key => {
             let data = snapshot.val()[key];
-
-            //Itens disponiveis
-            let itensDisponiveis: Item[] = [];
-            data.itensDisponiveis.forEach(item => {
-              itensDisponiveis.push(new Item(item.id, item.nome, item.quantidade, item.preco));  
-            });
-
-            //Itens comprados
-            let itensComprados: Item[] = [];
-            data.itensDisponiveis.forEach(item => {
-              itensComprados.push(new Item(item.id, item.nome, item.quantidade, item.preco)); 
-            });
-
-            compras.push(new Compra(data.id, data.nome, itensDisponiveis, itensComprados));
-    
-          });
-        
+            compras.push(Compra.parseJSON(data));
+          });       
         }
         
-        resolve(compras);
-      });
+        return compras;
     });
   }
 
-
-  getCompra(id: string) {
-    return this.db.ref('/compras/' + this.usuarioID + '/' + id).on('value');
+  /**
+   * Busca uma compra pelo ID
+   */
+  getCompra(id: string): Promise<Compra> {
+    return this.db.ref('/compras/' + this.usuarioID + '/' + id).once('value').then(snapshot => {
+      return Compra.parseJSON(snapshot.val());
+    });
   }
 
-  cadastrar(compra: Compra) {
+  /**
+   * Cadastra uma nova compra
+   */
+  cadastrar(compra: Compra):void {
     let newKey = this.db.ref('/compras/'+this.usuarioID).push().key;
     compra.setID(newKey);
    
     this.db.ref('/compras/' + this.usuarioID + '/' + newKey).set(compra);
   }
 
-  editar(id: string, compra: Compra) {
+  /**
+   * Edita uma compra pelo ID
+   */
+  editar(id: string, compra: Compra):void {
     this.db.ref('/compras/'+ this.usuarioID + '/' + id).set(compra);
   }
 
-  excluir(id: string) {
+  /**
+   * Remove uma compra
+   */
+  excluir(id: string): void {
     this.db.ref('/compras/' + this.usuarioID + '/' + id).set(null);
   }
 }
