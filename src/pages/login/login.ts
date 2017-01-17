@@ -29,6 +29,13 @@ export class LoginPage implements OnInit {
 
   ionViewDidLoad() {
     this.menuCtrl.enable(false);
+
+    this.usuarios.auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log(user);
+        this.changeToLista();
+      }
+    });  
   }
 
   //** Login **/
@@ -42,19 +49,17 @@ export class LoginPage implements OnInit {
           case 'auth/wrong-password': msg = 'Senha incorreta'; break
            
         }
+
+        if (msg == '' && erro.message) {
+          msg = erro.message;
+        }
+
         this.alertCtrl.create({
           title: 'Erro',
           message: msg,
           buttons: ['Ok']
         }).present();  
-      });
-      this.usuarios.auth.onAuthStateChanged((user) => {
-        if (user) {
-          console.log(user);
-          this.changeToLista();
-        }
-      });  
-    
+      });    
   }
 
   public cadastrar() {

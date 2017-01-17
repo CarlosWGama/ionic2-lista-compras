@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Compra } from './../models/compra.model';
-import { Item } from './../models/item.mode';
 
 declare var firebase;
 
@@ -15,6 +14,10 @@ export class Compras {
     console.log('Hello Compras Provider');
     this.db = firebase.database();
     this.usuarioID = firebase.auth().currentUser.uid;
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user)
+        this.usuarioID = user.uid;
+    });
   }
 
   /**
@@ -24,7 +27,8 @@ export class Compras {
     return this.db.ref('/compras/' + this.usuarioID).once('value').then(snapshot => {
         
         let compras: Compra[] = [];
-        if (Object.keys(snapshot.val()).length > 0) {
+        
+        if (snapshot.val() && Object.keys(snapshot.val()).length > 0) {
           
           Object.keys(snapshot.val()).forEach(key => {
             let data = snapshot.val()[key];
