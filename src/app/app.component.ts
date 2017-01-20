@@ -56,7 +56,7 @@ export class MyApp {
    * Abre a Page correspondente no menu
    */
   menuOpenPage(page) {
-    this.rootPage = page;
+    this.navCtrl.setRoot(page);
   }
 
 }
