@@ -1,6 +1,6 @@
 import { Compra } from './../../models/compra.model';
 import { Component } from '@angular/core';
-import { NavController, AlertController, NavParams } from 'ionic-angular';
+import { NavController, AlertController, NavParams, LoadingController } from 'ionic-angular';
 
 import { ListasPage } from './../listas/listas';
 import { Compras } from './../../providers/compras';
@@ -14,10 +14,22 @@ export class ComprasPage {
 
   compra: Compra = new Compra();
   
-  constructor(public navCtrl: NavController, private compras: Compras, private alertCtrl: AlertController, public params: NavParams ) {
+  constructor(public navCtrl: NavController, private compras: Compras, private alertCtrl: AlertController,
+              public params: NavParams, private loadingCtrl: LoadingController ) {
+    
     let compraID: string = this.params.get('compraID');
+    //Edição
     if (compraID) {
-      this.compras.getCompra(compraID).then(compra => this.compra = compra );
+      //cria o loading
+      let loading = this.loadingCtrl.create({
+        content: "Aguarde"
+      });  
+      loading.present();
+      
+      this.compras.getCompra(compraID).then(compra => {
+        this.compra = compra;
+        loading.dismiss();
+      });
     }
 
   }

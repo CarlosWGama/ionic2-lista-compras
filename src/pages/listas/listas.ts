@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 
 import { ComprasPage } from './../compras/compras';
 import { Compras } from './../../providers/compras';
@@ -13,12 +13,20 @@ export class ListasPage implements OnInit {
 
   lista: Promise<any[]>;
 
-  constructor(public navCtrl: NavController, private compras: Compras) {
+  constructor(public navCtrl: NavController, private compras: Compras, private loadingCtrl: LoadingController) {
   }
 
   ngOnInit() {
+    let loading = this.loadingCtrl.create({
+      content: 'Buscando Informações'
+    });
+    loading.present();
+
     this.lista = this.compras.getCompras();
-    //console.log(this.lista);
+    
+    this.lista.then(value => {
+      loading.dismiss();
+    });
   }
 
   /**
