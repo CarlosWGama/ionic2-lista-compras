@@ -54,7 +54,7 @@ export class Compras {
    */
   cadastrar(compra: Compra):void {
     let newKey = this.db.ref('/compras/'+this.usuarioID).push().key;
-    compra.setID(newKey);
+    compra.ID = newKey;
    
     this.db.ref('/compras/' + this.usuarioID + '/' + newKey).set(compra);
   }

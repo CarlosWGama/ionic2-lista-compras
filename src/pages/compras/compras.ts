@@ -33,15 +33,15 @@ export class ComprasPage {
     this.alertCtrl.create({
       title: 'Salvar?',
       message: 'Digite um nome para a compra',
-      inputs: [ { name: 'nome', placeholder: 'Nome da compra', value: this.compra.getNome() } ],
+      inputs: [ { name: 'nome', placeholder: 'Nome da compra', value: this.compra.Nome } ],
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Salvar',
           handler: (data) => {
-            this.compra.setNome(data.nome);
-            if (this.compra.getID())
-              this.compras.editar(this.compra.getID(), this.compra);
+            this.compra.Nome = data.nome;
+            if (this.compra.ID)
+              this.compras.editar(this.compra.ID, this.compra);
             else
               this.compras.cadastrar(this.compra);
             this.navCtrl.setRoot(ListasPage);
@@ -70,7 +70,7 @@ export class ComprasPage {
           text: 'Adicionar',
           handler: (data) => {
             let item = new Item(this.compra.pushItemID(), data.nome, data.quantidade, data.preco);
-            this.compra.getItensDisponiveis().push(item);
+            this.compra.ItensDisponiveis.push(item);
             this.compra.ordenaListas();
           }
         }
@@ -83,7 +83,7 @@ export class ComprasPage {
    */
   comprar(item: Item) {
     this.compra.removeListaDisponivel(item)
-    this.compra.getItensComprados().push(item);
+    this.compra.ItensComprados.push(item);
     this.compra.ordenaListas();
   }
 
@@ -92,7 +92,7 @@ export class ComprasPage {
    */
   descomprar(item: Item) {
     this.compra.removeListaComprados(item);
-    this.compra.getItensDisponiveis().push(item);
+    this.compra.ItensDisponiveis.push(item);
     this.compra.ordenaListas();
   }
 
@@ -101,8 +101,8 @@ export class ComprasPage {
    */
   excluir(item: Item, lista: number) { 
     this.alertCtrl.create({
-      title: 'Excluir ' + item.getNome() ,
-      message: 'Deseja realmente excluir o item ' + item.getNome(),
+      title: 'Excluir ' + item.Nome ,
+      message: 'Deseja realmente excluir o item ' + item.Nome,
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {

@@ -5,13 +5,13 @@ export class Item {
     }
 
     /************** GETTERS e SETTERS *******************/
-    getID(): number { return this.id; }
-    getNome(): string { return this.nome; }
-    setNome(nome: string): void { this.nome = nome; }
-    getQuantidade(): number { return this.quantidade; }
-    setQuantidade(quantidade: number): void { this.quantidade = quantidade; }
-    getPreco(): number { return this.preco; }
-    setPreco(preco: number): void { this.preco = preco; }
+    get ID(): number { return this.id; }
+    get Nome(): string { return this.nome; }
+    set Nome(nome: string) { this.nome = nome; } 
+    get Quantidade(): number { return this.quantidade; }
+    set Quantidade(quantidade: number) { this.quantidade = quantidade }
+    get Preco(): number { return this.preco; }
+    set Preco(preco: number) { this.preco = preco; }
+    get Total(): number { return this.preco * this.quantidade; }
 
-    getTotal(): number { return this.preco * this.quantidade; }
 }

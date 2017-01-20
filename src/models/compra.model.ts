@@ -9,25 +9,25 @@ export class Compra {
         private itensDisponiveis: Item[] = [], private itensComprados: Item[] = [], private itemID: number = 0
     ) { 
         itensComprados.forEach((item: Item) => {
-            this.totalComprado += item.getTotal(); 
+            this.totalComprado += item.Total; 
         });
 
         this.total = this.totalComprado;
 
         itensDisponiveis.forEach((item: Item) => {
-            this.total += item.getTotal();
+            this.total += item.Total;
         });
     }
 
     /********** GETTERS *******************/
-    getID(): string { return this.id; }
-    setID(id: string) { this.id = id; }
-    getNome(): string { return this.nome; }
-    setNome(nome: string): void { this.nome = nome; }
-    getItensDisponiveis(): Item[] { return this.itensDisponiveis }
-    getItensComprados(): Item[] { return this.itensComprados; }
-    getTotalComprado(): number { return this.totalComprado; }
-    getTotal(): number { return this.total; }
+    get ID(): string { return this.id; }
+    set ID(id: string) { this.id = id; }
+    get Nome(): string { return this.nome; }
+    set Nome(nome: string) { this.nome = nome; }
+    get ItensDisponiveis(): Item[] { return this.itensDisponiveis }
+    get ItensComprados(): Item[] { return this.itensComprados; }
+    get TotalComprado(): number { return this.totalComprado; }
+    get Total(): number { return this.total; }
 
     /**
      * Cria um objeto do tipo Compra a partir de um JSON
@@ -64,8 +64,8 @@ export class Compra {
      * Reordena as listas
      */
     public ordenaListas() {
-        this.itensComprados.sort((a: Item, b: Item) => a.getNome() > b.getNome() ? 1 : -1);
-        this.itensDisponiveis.sort((a: Item, b: Item) => a.getNome() > b.getNome() ? 1 : -1);
+        this.itensComprados.sort((a: Item, b: Item) => a.Nome > b.Nome ? 1 : -1);
+        this.itensDisponiveis.sort((a: Item, b: Item) => a.Nome > b.Nome ? 1 : -1);
         this.atualizarTotais();
     }
 
@@ -78,14 +78,14 @@ export class Compra {
 
         //Itens comprados
         this.itensComprados.forEach((item: Item) => {
-        this.totalComprado += item.getTotal();
+        this.totalComprado += item.Total;
         });
 
         this.total = this.totalComprado;
 
         //Itens ainda na lista
         this.itensDisponiveis.forEach((item: Item) => {
-        this.total += item.getTotal();
+        this.total += item.Total;
         });
     }
 
@@ -93,13 +93,13 @@ export class Compra {
      * Remove item da lista de itens disponiveis
      */
     public removeListaDisponivel(item: Item) {
-        this.itensDisponiveis = this.itensDisponiveis.filter((value: Item) => value.getID() != item.getID());
+        this.itensDisponiveis = this.itensDisponiveis.filter((value: Item) => value.ID != item.ID);
     }
 
     /**
      * Remove item da lista de itens comprados
      */
     public removeListaComprados(item: Item) {
-        this.itensComprados = this.itensComprados.filter((value: Item) => value.getID() != item.getID());
+        this.itensComprados = this.itensComprados.filter((value: Item) => value.ID != item.ID);
     }
 }

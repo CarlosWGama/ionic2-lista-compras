@@ -21,9 +21,9 @@
     </ion-list-header>
 
     <ion-item-sliding *ngFor="let c of lista | async">
-      <ion-item (click)="abrirCompra(c.getID())"> {{c.getNome()}} </ion-item>
+      <ion-item (click)="abrirCompra(c.ID)"> {{c.Nome}} </ion-item>
       <ion-item-options side="right">
-        <button ion-button color="primary" (click)="excluirCompra(c.getID())">
+        <button ion-button color="primary" (click)="excluirCompra(c.ID)">
           <ion-icon name="trash"></ion-icon>
           Excluir
         </button>
