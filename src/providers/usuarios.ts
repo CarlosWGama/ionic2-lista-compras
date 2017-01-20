@@ -30,6 +30,13 @@ export class Usuarios {
   }
 
   /**
+   * Redefinir senha de acesso
+   */
+  public redefinirSenha(email: string): Promise<any> {
+    return this.auth.sendPasswordResetEmail(email);
+  }
+
+  /**
    * Recupera o usuário logado
    */
   public getUsuario(): any {

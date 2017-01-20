@@ -96,6 +96,46 @@ export class LoginPage implements OnInit {
     }).present();
   }
 
+  /**
+   * Redefinir a senha de acesso
+   */
+  redefinirSenha() {
+    this.alertCtrl.create({
+      title: 'Deseja redefinir sua senha?',
+      message: 'Uma mensagem será enviada para seu e-mail',
+      inputs: [ { name: 'email', type: 'email', placeholder: 'E-mail' } ],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Redefinir',
+          handler: (data) => {
+            this.usuarios.redefinirSenha(data.email).then(() => {
+              this.alertCtrl.create({
+                title: 'Redefinir a senha',
+                message: 'Um e-mail foi enviado para sua caixa de mensagem para redefinir a senha',
+                buttons: [ { text: 'Ok', role: 'cancel' } ]
+              }).present();
+            }).catch((erro) => {
+              let msg = '';
+              switch(erro.code) {
+                case 'auth/user-not-found': msg = 'Usuário não encontrado'; break;
+                case 'auth/invalid-email':          msg = 'E-mail inválido'; break;
+                default:                            msg = erro.message;
+              }
+
+              this.alertCtrl.create({
+                title: 'Erro',
+                message: msg,
+                buttons: [ { text: 'Ok', role: 'cancel' } ]
+              }).present();
+            });
+
+          }
+        }
+      ]
+    }).present();
+  }
+
   /* Envia o usuário para a página após login */
   private changeToLista():void {
     this.navCtrl.setRoot(ListasPage);
