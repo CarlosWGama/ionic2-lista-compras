@@ -25,11 +25,8 @@ export class Usuarios {
   /**
    * Cria o usuário
    */
-  public cadastrar(email: string, senha: string): boolean {
-    this.auth.createUserWithEmailAndPassword(email, senha).catch((error) => {
-      return false;
-    });
-    return true;
+  public cadastrar(email: string, senha: string): Promise<any> {
+    return this.auth.createUserWithEmailAndPassword(email, senha);
   }
 
   /**

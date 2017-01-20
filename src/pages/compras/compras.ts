@@ -81,7 +81,10 @@ export class ComprasPage {
         {
           text: 'Adicionar',
           handler: (data) => {
-            let item = new Item(this.compra.pushItemID(), data.nome, data.quantidade, data.preco);
+            let keyItem = this.compra.pushItemID();
+            if (!data.nome) data.nome = "Item " + keyItem; 
+           
+            let item = new Item(keyItem, data.nome, Number(data.quantidade), Number(data.preco));
             this.compra.ItensDisponiveis.push(item);
             this.compra.ordenaListas();
           }

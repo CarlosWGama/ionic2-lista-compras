@@ -1,3 +1,5 @@
 - Ajustes nos models
 - Exibição de Loading ao buscar os dados
 - Ajustado Bug na navegação pelo menu
+- Ajuste no layout da Compra
+- Tratamento de erros de campos vazios

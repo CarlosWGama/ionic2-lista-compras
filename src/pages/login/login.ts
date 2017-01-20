@@ -65,7 +65,6 @@ export class LoginPage implements OnInit {
   public cadastrar() {
     this.alertCtrl.create({
       title: 'Cadastrar Usuário',
-      message: 'Message',
       inputs: [
         {name: 'email', placeholder: 'Email', type:'email'},
         {name: 'senha', placeholder: 'Senha', type: 'password'}
@@ -75,7 +74,22 @@ export class LoginPage implements OnInit {
         {
           text: 'Cadastrar',
           handler: (data) => {
-            this.usuarios.cadastrar(data.email, data.senha);
+            this.usuarios.cadastrar(data.email, data.senha).catch(erro => {
+              let msg = '';
+              switch(erro.code) {
+                case 'auth/email-already-in-use':   msg = 'Conta já em uso'; break;
+                case 'auth/invalid-email':          msg = 'E-mail inválido'; break;
+                case 'auth/operation-not-allowed':  msg = 'Cheque novamente o e-mail ou senha'; break;
+                case 'auth/weak-password':          msg = 'Senha muito fraca'; break;
+                default:                            msg = erro.message;
+              }
+
+              this.alertCtrl.create({
+                title: 'Erro',
+                message: msg,
+                buttons: [ { text: 'Ok', role: 'cancel' } ]
+              }).present();
+            });
           }
         }
       ]
